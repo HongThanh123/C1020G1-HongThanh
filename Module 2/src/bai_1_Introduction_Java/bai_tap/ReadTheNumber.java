@@ -115,9 +115,7 @@ public class ReadTheNumber {
                 default:
                     RedNumber = "";
             }
-        }
-        int c;
-        switch (c){
+            switch (c){
                 case 1:
                     Red ="One";
                     break;
@@ -149,5 +147,6 @@ public class ReadTheNumber {
                     Red = "";
             }
             System.out.println(RedNumber + Red);
+        }
         }
     }
