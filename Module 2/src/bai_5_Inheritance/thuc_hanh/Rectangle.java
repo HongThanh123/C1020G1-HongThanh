@@ -18,6 +18,7 @@ public class Rectangle extends Shape {
         this.length = length;
     }
 
+
     public double getWidth() {
         return width;
     }
@@ -44,11 +45,10 @@ public class Rectangle extends Shape {
 
     @Override
     public String toString() {
-        return "A Rectangle with width="
+        return "A Rectangle with width = "
                 + getWidth()
-                + " and length="
-                + getLength()
-                + ", which is a subclass of "
-                + super.toString();
+                + ",  length = "
+                + getLength();
+
     }
 }
