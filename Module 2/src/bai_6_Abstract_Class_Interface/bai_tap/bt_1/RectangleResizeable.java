@@ -6,12 +6,16 @@ public class RectangleResizeable extends Rectangle implements Resizeable {
     public RectangleResizeable() {
     }
 
-    public RectangleResizeable(double color, double filled, String width, boolean length) {
-        super(color, filled, width, length);
-    }
-
     public RectangleResizeable(double width, double length) {
         super(width, length);
+    }
+
+    public RectangleResizeable(double width, double length, String color, boolean filled) {
+        super(width, length, color, filled);
+    }
+
+    public RectangleResizeable(double side, String color, boolean filled) {
+        super(side, color, filled);
     }
 
     @Override

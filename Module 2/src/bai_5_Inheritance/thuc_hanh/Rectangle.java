@@ -18,6 +18,9 @@ public class Rectangle extends Shape {
         this.length = length;
     }
 
+    public Rectangle(double side, String color, boolean filled) {
+    }
+
 
     public double getWidth() {
         return width;
