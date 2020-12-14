@@ -27,11 +27,11 @@ public class ElementAggregation {
             array2[j] = scanner.nextInt();
             j++;
         }
-        System.out.print("Elements in array1: ");
+        System.out.print("Kích thước mảng 1: ");
         for (int x = 0; x < array1.length; x++) {
             System.out.print(array1[x]);
         }
-        System.out.print("Elements in array2: ");
+        System.out.print("Kích thước mảng 2: ");
         for (int y = 0; y < array2.length; y++) {
             System.out.print(array2[y]);
         }
