@@ -1,14 +1,14 @@
 package bai_10_Java_Colletion_Framework.thuc_hanh;
 
-public class Student {
+public class Students implements Comparable<Students> {
     private String name;
     private int age;
     private String address;
 
-    public Student() {
+    public Students() {
     }
 
-    public Student(String name, int age, String address) {
+    public Students(String name, int age, String address) {
         this.name = name;
         this.age = age;
         this.address = address;
@@ -40,12 +40,14 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Students{" +
                 "name='" + name + '\'' +
-                ", age=" + age +
-                ", address='" + address + '\'' +
                 '}';
     }
 
 
+    @Override
+    public int compareTo(Students students) {
+        return this.getName().compareTo(students.getName());
+    }
 }

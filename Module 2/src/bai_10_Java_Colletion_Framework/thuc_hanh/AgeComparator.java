@@ -1,0 +1,11 @@
+package bai_10_Java_Colletion_Framework.thuc_hanh;
+
+import java.util.Comparator;
+
+public class AgeComparator implements Comparator<Student> {
+
+    @Override
+    public int compare(Student o1, Student o2) {
+        return  o1.getAge() - o2.getAge();
+    }
+}
