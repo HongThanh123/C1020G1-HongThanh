@@ -3,6 +3,12 @@ package bai_13_Exception_Debug.bai_tap;
 import java.util.Scanner;
 
 public class Triangle {
+    public static void Triangle (int x, int y, int z) throws IllegalTriangleException {
+        if (x<=0 || y<=0 || z<=0 || x+y<z || x+z<y || y+z<x){
+            throw new IllegalTriangleException();
+        }
+        System.out.println("tổng 2 cạnh không lớn hơn cạnh còn lại");
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Nhập số x: ");
@@ -11,14 +17,14 @@ public class Triangle {
         int y = scanner.nextInt();
         System.out.println("Nhập số z: ");
         int z = scanner.nextInt();
-        Triangle tr = new Triangle();
-        tr.triangle(x,y,z);
 
-    }
-
-    private void triangle(int x, int y, int z) {
         try {
-            
+            Triangle(x,y,z);
+        }catch (IllegalTriangleException e){
+            e.printStackTrace();
         }
+
     }
+
+
 }
