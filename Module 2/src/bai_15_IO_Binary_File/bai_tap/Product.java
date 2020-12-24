@@ -1,0 +1,77 @@
+package bai_15_IO_Binary_File.bai_tap;
+
+import java.io.Serializable;
+
+public class Product implements Serializable {
+    private int id;
+    private String name;
+    private String brand;
+    private boolean price;
+    private String other;
+
+    public Product() {
+    }
+
+    public Product(int id, String name, String brand, boolean price, String other) {
+        this.id = id;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.other = other;
+    }
+
+    public Product(String ao, int id, double price) {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public boolean isPrice() {
+        return price;
+    }
+
+    public void setPrice(boolean price) {
+        this.price = price;
+    }
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
+
+    @Override
+    public String toString() {
+        return "Quan_ly_san_pham{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                ", other='" + other + '\'' +
+                '}';
+    }
+}
