@@ -434,40 +434,40 @@ public class MainController {
     }
 
     private static void addNewBooking() {
-//        List<Customer> list = readAllCustomer(CUSTOMER);
-//        showInfoCustomer(CUSTOMER);
-//        System.out.println(" Booking : ");
-//        int choose = scanner.nextInt();
-//        System.out.println("1.\tBooking Villa\n" +
-//                "2.\tBooking House\n" +
-//                "3.\tBooking Room\n");
-//        System.out.println("Chon 1-3");
-//        int iCustomer = scanner.nextInt();
-//
-//        List<Service> list1 =  null;
-//        switch (iCustomer){
-//            case 1:
-//                list1 = readAllService(VILLA);
-//                showAllService(VILLA);
-//                break;
-//            case 2:
-//                list1 = readAllService(HOUSE);
-//                showAllService(HOUSE);
-//                break;
-//            case 3:
-//                list1 = readAllService(ROOM);
-//                showAllService(ROOM);
-//                break;
-//        }
-//        System.out.println("Please choose : ");
-//        int iService = scanner.nextInt();
-//
-//        Customer customer = list.get(iCustomer-1);
-//        customer.setService(list1.get(iService-1));
-//        FileRead.setPath(BOOKING);
-//        FileRead.writeFile(new String[]{customer.toString()});
-//
-//        System.out.println("Booking is done");
+        List<Customer> list = readAllCustomer(CUSTOMER);
+        showInfoCustomer(CUSTOMER);
+        System.out.println(" Booking : ");
+        int choose = scanner.nextInt();
+        System.out.println("1.\tBooking Villa\n" +
+                "2.\tBooking House\n" +
+                "3.\tBooking Room\n");
+        System.out.println("Chon 1-3");
+        int iCustomer = scanner.nextInt();
+
+        List<Service> list1 =  null;
+        switch (iCustomer){
+            case 1:
+                list1 = readAllService(VILLA);
+                showAllService(VILLA);
+                break;
+            case 2:
+                list1 = readAllService(HOUSE);
+                showAllService(HOUSE);
+                break;
+            case 3:
+                list1 = readAllService(ROOM);
+                showAllService(ROOM);
+                break;
+        }
+        System.out.println("Please choose : ");
+        int iService = scanner.nextInt();
+
+        Customer customer = list.get(iCustomer-1);
+        customer.setService(list1.get(iService-1));
+        FileRead.setPath(BOOKING);
+        FileRead.writeFile(new String[]{customer.toString()});
+
+        System.out.println("Booking is done");
 
     }
 
