@@ -1,4 +1,3 @@
-drop database if exists case_study;
 create database case_study;
 use case_study;
 create table loai_khach (
@@ -144,7 +143,6 @@ insert into kieu_thue(id_kieu_thue,ten_kieu_thue,gia)values
 (2,'gio',200000),
 (3,'thang',100000),
 (4,'nam',50000);
-
 create table dich_vu (
     id_dich_vu int primary key,
     ten_dich_vu varchar(45),
@@ -154,20 +152,21 @@ create table dich_vu (
     id_loai_dich_vu int,
     trang_thai varchar(45),
     id_kieu_thue int,
+    chi_phi_thue varchar(45),
     
     Foreign key (id_loai_dich_vu) references loai_dich_vu(id_loai_dich_vu),
     Foreign key (id_kieu_thue) references kieu_thue(id_kieu_thue)
 );
-insert into dich_vu(id_dich_vu,ten_dich_vu,dien_tich,so_tang,so_nguoi_toi_da,id_loai_dich_vu,trang_thai,id_kieu_thue)values
-(1,'Villa1',300,10,1000,001,'Van Con',1),
-(2,'Villa2',310,11,900,001,'Van Con',3),
-(3,'Villa3',300,9,950,001,'Het',2),
-(4,'House1',200,5,550,002,'Het',4),
-(5,'House2',220,6,450,002,'Van Con',1),
-(6,'House3',210,7,500,002,'Het',3),
-(7,'Room1',150,4,250,003,'Van Con',3),
-(8,'Room2',100,4,200,003,'Het',1),
-(9,'Room3',120,3,150,003,'Van Con',4);
+insert into dich_vu(id_dich_vu,ten_dich_vu,dien_tich,so_tang,so_nguoi_toi_da,id_loai_dich_vu,trang_thai,id_kieu_thue,chi_phi_thue)values
+(1,'Villa1',300,10,1000,001,'Van Con',1,300000),
+(2,'Villa2',310,11,900,001,'Van Con',3,350000),
+(3,'Villa3',300,9,950,001,'Het',2,400000),
+(4,'House1',200,5,550,002,'Het',4,200000),
+(5,'House2',220,6,450,002,'Van Con',1,250000),
+(6,'House3',210,7,500,002,'Het',3,220000),
+(7,'Room1',150,4,250,003,'Van Con',3,150000),
+(8,'Room2',100,4,200,003,'Het',1,100000),
+(9,'Room3',120,3,150,003,'Van Con',4,120000);
 
 create table hop_dong (
     id_hop_dong int primary key,
@@ -178,13 +177,14 @@ create table hop_dong (
     ngay_ket_thuc date,
     tien_dat_coc int,
     id_hop_dong_chi_tiet int,
+    tong_tien int,
     
     Foreign key (id_khach_hang) references khach_hang(id_khach_hang),
     Foreign key (id_hop_dong_chi_tiet) references hop_dong_chi_tiet(id_hop_dong_chi_tiet),
     Foreign key (id_nhan_vien) references nhan_vien(id_nhan_vien),
     Foreign key (id_dich_vu) references dich_vu(id_dich_vu)
 );
-insert into hop_dong(id_hop_dong,id_nhan_vien,id_khach_hang,id_dich_vu,ngay_lam_hop_dong,ngay_ket_thuc,tien_dat_coc,id_hop_dong_chi_tiet) values
+insert into hop_dong(id_hop_dong,id_nhan_vien,id_khach_hang,id_dich_vu,ngay_lam_hop_dong,ngay_ket_thuc,tien_dat_coc,id_hop_dong_chi_tiet,tong_tien) values
 (0001,203,102,1,'2020-10-10','2020-12-10',1000000,2003),
 (0002,204,101,3,'2020-11-23','2020-12-23',1000000,2004),
 (0003,202,102,5,'2020-04-21','2020-06-21',1000000,2001),
@@ -195,18 +195,139 @@ insert into hop_dong(id_hop_dong,id_nhan_vien,id_khach_hang,id_dich_vu,ngay_lam_
 (0008,207,108,9,'2020-08-15','2020-10-15',1000000,2001),
 (0009,208,109,8,'2020-12-29','2021-02-20',1000000,2002),
 (00010,204,105,7,'2020-05-07','2020-07-07',1000000,2004);
--- yêu cầu 2
-select * from nhan_vien where (ho_ten like 'H%' or ho_ten like 'T%' or ho_ten like 'K%') and length(ho_ten)<15;
+-- yêu cầu 2 Hiển thị thông tin của tất cả nhân viên có trong hệ thống có tên bắt đầu là một trong các ký tự “H”, “T” hoặc “K” và có tối đa 15 ký tự.
 
--- yêu cầu 3
-select * from khach_hang where dia_chi in('Quang Tri','Da Nang') and (curdate() -ngay_sinh>(18*30*365)and curdate() -ngay_sinh<(50*30*365));
 
--- yêu cẩu 4
-select khach_hang.ho_ten, count(hop_dong.id_hop_dong) 'so lan dat phong' from khach_hang 
+select * 
+from nhan_vien 
+where (ho_ten like 'H%' or ho_ten like 'T%' or ho_ten like 'K%') and length(ho_ten)<15;
+
+-- yêu cầu 3 Hiển thị thông tin của tất cả khách hàng có độ tuổi từ 18 đến 50 tuổi và có địa chỉ ở “Đà Nẵng” hoặc “Quảng Trị”.
+select * 
+from khach_hang 
+where dia_chi in('Quang Tri','Da Nang') and (curdate() -ngay_sinh>(18*30*365)and curdate() -ngay_sinh<(50*30*365));
+
+-- yêu cẩu 4 Đếm xem tương ứng với mỗi khách hàng đã từng đặt phòng bao nhiêu lần.
+--  Kết quả hiển thị được sắp xếp tăng dần theo số lần đặt phòng của khách hàng. 
+-- Chỉ đếm những khách hàng nào có Tên loại khách hàng là “Diamond”.
+select khach_hang.ho_ten, count(hop_dong.id_hop_dong) 'so lan dat phong' 
+from khach_hang 
 inner join hop_dong on khach_hang.id_khach_hang = hop_dong.id_khach_hang
 inner join loai_khach on khach_hang.id_loai_khach = loai_khach.id_loai_khach
-where loai_khach.id_loai_khach = 'Diamond'
+where loai_khach.ten_loai_khach = 'Diamond'
 group by khach_hang.id_khach_hang order by  'so lan dat phong';
+
+-- yêu cầu 5.	Hiển thị IDKhachHang, HoTen, TenLoaiKhach, IDHopDong, TenDichVu, NgayLamHopDong, NgayKetThuc, TongTien 
+-- (Với TongTien được tính theo công thức như sau: ChiPhiThue + SoLuong*Gia, với SoLuong và Giá là từ bảng DichVuDiKem) cho tất cả các Khách hàng đã từng đặt phỏng. 
+-- (Những Khách hàng nào chưa từng đặt phòng cũng phải hiển thị ra).
+
+select 
+	khach_hang.id_khach_hang,
+    khach_hang.ho_ten,
+    loai_khach.ten_loai_khach,
+    hop_dong.id_hop_dong,
+    dich_vu.ten_dich_vu,
+    hop_dong.ngay_lam_hop_dong,
+    hop_dong.ngay_ket_thuc,
+sum(dich_vu.chi_phi_thue + hop_dong_chi_tiet.so_luong * dich_vu_di_kem.gia) 'Tong tien' from khach_hang
+left join loai_khach on khach_hang.id_loai_khach = loai_khach.id_loai_khach
+left join hop_dong on khach_hang.id_khach_hang = hop_dong.id_khach_hang
+left join dich_vu on hop_dong.id_dich_vu = dich_vu.id_dich_vu
+left join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
+left join dich_vu_di_kem on hop_dong_chi_tiet.id_dich_vu_di_kem = dich_vu_di_kem.id_dich_vu_di_kem
+group by hop_dong.id_hop_dong;
+
+-- yêu cầu 6.	Hiển thị IDDichVu, TenDichVu, DienTich, ChiPhiThue, TenLoaiDichVu của tất cả các loại Dịch vụ chưa từng được 
+-- Khách hàng thực hiện đặt từ quý 1 của năm 2019 (Quý 1 là tháng 1, 2, 3).
+
+select 
+	dich_vu.id_dich_vu,
+    dich_vu.ten_dich_vu,
+    dich_vu.dien_tich,
+    dich_vu.chi_phi_thue,
+    loai_dich_vu.ten_loai_dich_vu 
+from dich_vu
+inner join loai_dich_vu on dich_vu.id_loai_dich_vu = loai_dich_vu.id_loai_dich_vu
+where not exists (
+    select hop_dong.id_hop_dong 
+    from hop_dong
+    where (hop_dong.ngay_lam_hop_dong between '2020-01-01' and '2020-03-31') and hop_dong.id_dich_vu = dich_vu.id_dich_vu
+);
+
+-- yêu cầu 7.	Hiển thị thông tin IDDichVu, TenDichVu, DienTich, SoNguoiToiDa, ChiPhiThue, TenLoaiDichVu của tất cả các loại dịch vụ 
+-- đã từng được Khách hàng đặt phòng trong năm 2018 nhưng chưa từng được Khách hàng đặt phòng  trong năm 2019
+
+select 
+    dich_vu.id_dich_vu,
+	dich_vu.ten_dich_vu,
+    dich_vu.dien_tich,
+    dich_vu.so_nguoi_toi_da,
+    dich_vu.chi_phi_thue,
+    loai_dich_vu.ten_loai_dich_vu,
+    hop_dong.ngay_lam_hop_dong
+from dich_vu 
+inner join loai_dich_vu on dich_vu.id_loai_dich_vu = loai_dich_vu.id_loai_dich_vu
+inner join hop_dong on dich_vu.id_dich_vu = hop_dong.id_dich_vu
+where exists (
+	select hop_dong.id_hop_dong
+    from hop_dong
+    where year(hop_dong.ngay_lam_hop_dong) = 2020 and hop_dong.id_dich_vu = dich_vu.id_dich_vu
+)
+    and not exists (
+    select hop_dong.id_hop_dong
+    from hop_dong
+    where year(hop_dong.ngay_lam_hop_dong) = 2021 and hop_dong.id_dich_vu = dich_vu.id_dich_vu
+);
+
+-- yêu cầu 8.	Hiển thị thông tin HoTenKhachHang có trong hệ thống, với yêu cầu HoThenKhachHang không trùng nhau.
+select 
+distinct khach_hang.ho_ten 
+from khach_hang;
+select khach_hang.ho_ten 
+from khach_hang 
+group by khach_hang.ho_ten;
+select khach_hang.ho_ten 
+from khach_hang 
+union 
+select khach_hang.ho_ten 
+from khach_hang;
+
+-- yêu cầu 9.	Thực hiện thống kê doanh thu theo tháng, nghĩa là tương ứng với mỗi tháng trong năm 2019 thì sẽ có bao nhiêu khách hàng thực hiện đặt phòng
+select  temp.month, count(month(hop_dong.ngay_lam_hop_dong)) 'So lan khach hang dang ky' , sum(hop_dong.tong_tien) 'Tong tien' 
+from
+(select 1 as month
+union select 2 as month
+union select 3 as month
+union select 4 as month
+union select 5 as month
+union select 6 as month
+union select 7 as month
+union select 8 as month
+union select 9 as month
+union select 10 as month
+union select 11 as month
+union select 12 as month) as temp
+left join hop_dong on hop_dong.ngay_lam_hop_dong = temp.month
+left join khach_hang on khach_hang.id_khach_hang = hop_dong.id_khach_hang
+where year(hop_dong.ngay_lam_hop_dong) = '2020' or year(hop_dong.ngay_lam_hop_dong) is null or month(hop_dong.ngay_lam_hop_dong) is null
+group by temp.month
+order by temp.month;
+
+-- yeu cau 10.	Hiển thị thông tin tương ứng với từng Hợp đồng thì đã sử dụng bao nhiêu Dịch vụ đi kèm. 
+-- Kết quả hiển thị bao gồm IDHopDong, NgayLamHopDong, NgayKetthuc, TienDatCoc, SoLuongDichVuDiKem (được tính dựa trên việc count các IDHopDongChiTiet).
+
+select 
+hop_dong.id_hop_dong,
+hop_dong.ngay_lam_hop_dong,
+hop_dong.ngay_ket_thuc,
+hop_dong.tien_dat_coc,
+count(hop_dong_chi_tiet.id_dich_vu_di_kem) 'So luong dich vu di kem'
+from hop_dong
+join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
+group by hop_dong.id_hop_dong;
+
+
+
 
 
 
