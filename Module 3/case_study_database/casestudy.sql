@@ -1,3 +1,4 @@
+-- drop database case_study;
 create database case_study;
 use case_study;
 create table loai_khach (
@@ -32,7 +33,7 @@ insert into khach_hang(id_loai_khach,id_khach_hang,ho_ten,ngay_sinh,so_cmtnd,sdt
 (1,106,'Nguyen Viet Dung','2000-09-10','278351789','0909352678','vietdung@gmail.com','Da Nang'),
 (3,107,'Le Quang Duong','1994-02-28','378462534','09367452168','quangduong@gmail.com','Quang Binh'),
 (4,108,'Nguyen Thanh Tung','1992-01-01','983526345','0993625142','thanhtung@gmail.com','Quang Nam'),
-(2,109,'Tran Trung Son','1993-05-10','367241563','0936745632','trungson@gmail.com','Hue'),
+(2,109,'Tran Trung Son','1993-05-10','367241563','0936745632','trungson@gmail.com','Quang Ngai'),
 (1,110,'Tran Huu Han','1996-07-18','834621673','0945673452','huuhan@gmail.com','Binh Dinh');
 
 
@@ -175,26 +176,33 @@ create table hop_dong (
     id_dich_vu int,
     ngay_lam_hop_dong date,
     ngay_ket_thuc date,
-    tien_dat_coc int,
+    tien_dat_coc decimal(9,2),
     id_hop_dong_chi_tiet int,
-    tong_tien int,
+    tong_tien decimal(9,2),
     
     Foreign key (id_khach_hang) references khach_hang(id_khach_hang),
     Foreign key (id_hop_dong_chi_tiet) references hop_dong_chi_tiet(id_hop_dong_chi_tiet),
     Foreign key (id_nhan_vien) references nhan_vien(id_nhan_vien),
     Foreign key (id_dich_vu) references dich_vu(id_dich_vu)
 );
-insert into hop_dong(id_hop_dong,id_nhan_vien,id_khach_hang,id_dich_vu,ngay_lam_hop_dong,ngay_ket_thuc,tien_dat_coc,id_hop_dong_chi_tiet,tong_tien) values
-(0001,203,102,1,'2020-10-10','2020-12-10',1000000,2003),
-(0002,204,101,3,'2020-11-23','2020-12-23',1000000,2004),
-(0003,202,102,5,'2020-04-21','2020-06-21',1000000,2001),
-(0004,205,104,6,'2020-02-22','2020-04-28',1000000,2002),
-(0005,201,103,4,'2020-06-12','2021-06-12',1000000,2005),
-(0006,209,107,8,'2020-07-25','2020-09-25',1000000,2003),
-(0007,206,105,1,'2020-01-03','2020-03-03',1000000,2002),
-(0008,207,108,9,'2020-08-15','2020-10-15',1000000,2001),
-(0009,208,109,8,'2020-12-29','2021-02-20',1000000,2002),
-(00010,204,105,7,'2020-05-07','2020-07-07',1000000,2004);
+drop table hop_dong;
+insert into hop_dong values 
+(0001,203,102,1,'2020-10-10','2020-12-10',2500,2003,2000),
+(0002,205,104,6,'2020-02-22','2020-04-28',1000,2002,2500),
+(0003,202,102,5,'2020-04-21','2020-06-21',1000,2001,3000),
+(0004,205,104,6,'2020-02-22','2020-04-28',1000,2002,2500),
+(0005,201,103,4,'2020-06-12','2021-06-12',2000,2005,3200),
+(0006,209,107,8,'2020-07-25','2020-09-25',1000,2003,3500),
+(0007,206,105,1,'2020-01-03','2020-03-03',500,2002,4000),
+(0008,207,108,9,'2020-08-15','2020-10-15',1000,2001,1200),
+(0009,208,109,8,'2020-12-29','2021-02-20',1000,2002,5100),
+(00010,204,105,7,'2020-05-07','2020-07-07',1000,2004,2200);
+
+
+
+
+
+
 -- yêu cầu 2 Hiển thị thông tin của tất cả nhân viên có trong hệ thống có tên bắt đầu là một trong các ký tự “H”, “T” hoặc “K” và có tối đa 15 ký tự.
 
 
@@ -325,6 +333,94 @@ count(hop_dong_chi_tiet.id_dich_vu_di_kem) 'So luong dich vu di kem'
 from hop_dong
 join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
 group by hop_dong.id_hop_dong;
+
+-- yêu cầu 11.	Hiển thị thông tin các Dịch vụ đi kèm đã được sử dụng bởi những Khách hàng có TenLoaiKhachHang là “Diamond” và có địa chỉ là “Vinh” hoặc “Quảng Ngãi”.
+select distinct
+dich_vu_di_kem.ten_dich_vu_di_kem,
+dich_vu_di_kem.gia,
+dich_vu_di_kem.don_vi
+from hop_dong
+join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
+join dich_vu_di_kem on hop_dong_chi_tiet.id_dich_vu_di_kem = dich_vu_di_kem.id_dich_vu_di_kem
+join khach_hang on khach_hang.id_khach_hang = hop_dong.id_khach_hang
+join loai_khach on khach_hang.id_loai_khach = loai_khach.id_loai_khach
+where loai_khach.ten_loai_khach = 'Diamond' and khach_hang.dia_chi in ('Vinh','Quang Ngai');	
+
+-- yêu cầu 12.	Hiển thị thông tin IDHopDong, TenNhanVien, TenKhachHang, SoDienThoaiKhachHang, TenDichVu, SoLuongDichVuDikem 
+-- (được tính dựa trên tổng Hợp đồng chi tiết), TienDatCoc của 
+-- tất cả các dịch vụ đã từng được khách hàng đặt vào 3 tháng cuối năm 2019 nhưng chưa từng được khách hàng đặt vào 6 tháng đầu năm 2019.
+
+select 
+hop_dong.id_hop_dong,
+nhan_vien.ho_ten,
+khach_hang.ho_ten,
+khach_hang.sdt,
+dich_vu.ten_dich_vu,
+count(hop_dong_chi_tiet.id_dich_vu_di_kem) as 'so lan su dung'
+from hop_dong
+join nhan_vien on hop_dong.id_nhan_vien = nhan_vien.id_nhan_vien
+join khach_hang on hop_dong.id_khach_hang = khach_hang.id_khach_hang
+join dich_vu on dich_vu.id_dich_vu = hop_dong.id_dich_vu
+join hop_dong_chi_tiet on hop_dong.id_hop_dong_chi_tiet = hop_dong_chi_tiet.id_hop_dong_chi_tiet
+where not exists (
+	select hop_dong.id_hop_dong
+    where hop_dong.ngay_lam_hop_dong between '2020-01-01' and '2021-06-31'
+)
+and exists (
+	select hop_dong.id_hop_dong
+    where hop_dong.ngay_lam_hop_dong between '2020-09-01' and '2021-12-31'
+);
+
+-- yêu cầu 13.	Hiển thị thông tin các Dịch vụ đi kèm được sử dụng nhiều nhất bởi các Khách hàng đã đặt phòng. 
+-- (Lưu ý là có thể có nhiều dịch vụ có số lần sử dụng nhiều như nhau).
+create temporary table temp
+select dich_vu_di_kem.ten_dich_vu_di_kem as 'ten dich vu di kem' , count(hop_dong_chi_tiet.id_dich_vu_di_kem) as so_lan_su_dung
+from hop_dong_chi_tiet
+join dich_vu_di_kem on dich_vu_di_kem.id_dich_vu_di_kem = hop_dong_chi_tiet.id_dich_vu_di_kem
+group by dich_vu_di_kem.ten_dich_vu_di_kem;
+
+select * from temp;
+
+create temporary table temp1
+select max(temp.so_lan_su_dung) as 'so lan su dung nhieu nhat'
+from temp;
+select * from temp1;
+drop temporary table temp1;
+
+select temp.ten_dich_vu_di_kem, temp.so_lan_su_dung 
+from temp
+join temp1 on temp.so_lan_su_dung = temp1.so_lan_su_dung_nhieu_nhat;
+
+-- yêu cầu 14.	Hiển thị thông tin tất cả các Dịch vụ đi kèm chỉ mới được sử dụng một lần duy nhất. 
+-- Thông tin hiển thị bao gồm IDHopDong, TenLoaiDichVu, TenDichVuDiKem, SoLanSuDung.
+select 
+hop_dong.id_hop_dong, 
+loai_dich_vu.ten_loai_dich_vu,
+dich_vu_di_kem.ten_dich_vu_di_kem,
+count(hop_dong_chi_tiet.id_dich_vu_di_kem) as 'so lan su dung'
+from hop_dong
+join loai_dich_vu on hop_dong.id_dich_vu = loai_dich_vu.id_dich_vu
+join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
+join dich_vu_di_kem on dich_vu_di_kem.id_dich_vu_di_kem = hop_dong_chi_tiet.id_dich_vu_di_kem
+group by dich_vu_di_kem.id_dich_vu_di_kem having so_lan_su_dung = 1;
+
+-- yêu càu 15.	Hiển thi thông tin của tất cả nhân viên bao gồm IDNhanVien, HoTen, TrinhDo, TenBoPhan, SoDienThoai, DiaChi mới chỉ lập 
+-- được tối đa 3 hợp đồng từ năm 2018 đến 2019.
+
+select
+	nhan_vien.id_nhan_vien,
+    nhan_vien.ho_ten,
+    trinh_do.trinh_do,
+    bo_phan.ten_bo_phan,
+    nhan_vien.sdt,
+    nhan_vien.dia_chi,
+    count(hop_dong.id_nhan_vien) as 'so lan su dung'
+    from hop_dong
+    join bo_phan on hop_dong.id_bo_phan = bo_phan.id_bo_phan
+    join hop_dong on hop_dong.id_nhan_vien = nhan_vien.id_nhan_vien
+    where hop_dong.ngay_lam_hop_dong between '2020-01-01' and '2020-12-31'
+    group by nhan_vien.ho_ten
+    having so_lan_su_dung <4;
 
 
 
