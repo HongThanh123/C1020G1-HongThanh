@@ -185,7 +185,7 @@ create table hop_dong (
     Foreign key (id_nhan_vien) references nhan_vien(id_nhan_vien),
     Foreign key (id_dich_vu) references dich_vu(id_dich_vu)
 );
-drop table hop_dong;
+-- drop table hop_dong;
 insert into hop_dong values 
 (0001,203,102,1,'2020-10-10','2020-12-10',2500,2003,2000),
 (0002,205,104,6,'2020-02-22','2020-04-28',1000,2002,2500),
@@ -208,7 +208,8 @@ insert into hop_dong values
 
 select * 
 from nhan_vien 
-where (ho_ten like 'H%' or ho_ten like 'T%' or ho_ten like 'K%') and length(ho_ten)<15;
+where 
+(ho_ten like 'H%' or ho_ten like 'T%' or ho_ten like 'K%') and length(ho_ten)<=15;
 
 -- yêu cầu 3 Hiển thị thông tin của tất cả khách hàng có độ tuổi từ 18 đến 50 tuổi và có địa chỉ ở “Đà Nẵng” hoặc “Quảng Trị”.
 select * 
@@ -379,6 +380,8 @@ from hop_dong_chi_tiet
 join dich_vu_di_kem on dich_vu_di_kem.id_dich_vu_di_kem = hop_dong_chi_tiet.id_dich_vu_di_kem
 group by dich_vu_di_kem.ten_dich_vu_di_kem;
 
+drop temporary table temp;
+
 select * from temp;
 
 create temporary table temp1
@@ -397,12 +400,14 @@ select
 hop_dong.id_hop_dong, 
 loai_dich_vu.ten_loai_dich_vu,
 dich_vu_di_kem.ten_dich_vu_di_kem,
-count(hop_dong_chi_tiet.id_dich_vu_di_kem) as 'so lan su dung'
+count(hop_dong_chi_tiet.id_dich_vu_di_kem) so_lan_su_dung
 from hop_dong
-join loai_dich_vu on hop_dong.id_dich_vu = loai_dich_vu.id_dich_vu
+join dich_vu on hop_dong.id_dich_vu = dich_vu.id_dich_vu
+join loai_dich_vu on loai_dich_vu.id_loai_dich_vu = dich_vu.id_loai_dich_vu
 join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
 join dich_vu_di_kem on dich_vu_di_kem.id_dich_vu_di_kem = hop_dong_chi_tiet.id_dich_vu_di_kem
-group by dich_vu_di_kem.id_dich_vu_di_kem having so_lan_su_dung = 1;
+group by dich_vu_di_kem.id_dich_vu_di_kem 
+having so_lan_su_dung = 1;
 
 -- yêu càu 15.	Hiển thi thông tin của tất cả nhân viên bao gồm IDNhanVien, HoTen, TrinhDo, TenBoPhan, SoDienThoai, DiaChi mới chỉ lập 
 -- được tối đa 3 hợp đồng từ năm 2018 đến 2019.
@@ -414,13 +419,121 @@ select
     bo_phan.ten_bo_phan,
     nhan_vien.sdt,
     nhan_vien.dia_chi,
-    count(hop_dong.id_nhan_vien) as 'so lan su dung'
-    from hop_dong
-    join bo_phan on hop_dong.id_bo_phan = bo_phan.id_bo_phan
-    join hop_dong on hop_dong.id_nhan_vien = nhan_vien.id_nhan_vien
+    count(hop_dong.id_nhan_vien) so_lan_tao_hop_dong
+    from nhan_vien
+    join trinh_do on nhan_vien.id_trinh_do = trinh_do.id_trinh_do
+    join bo_phan on nhan_vien.id_bo_phan = bo_phan.id_bo_phan
+    join hop_dong on nhan_vien.id_nhan_vien = hop_dong.id_nhan_vien
     where hop_dong.ngay_lam_hop_dong between '2020-01-01' and '2020-12-31'
     group by nhan_vien.ho_ten
-    having so_lan_su_dung <4;
+    having so_lan_tao_hop_dong <=3;
+    
+  -- yêu cầu  16.	Xóa những Nhân viên chưa từng lập được hợp đồng nào từ năm 2017 đến năm 2019.
+    
+delete from nhan_vien where not exists (
+select nhan_vien.id_nhan_vien 
+from hop_dong
+where hop_dong.ngay_lam_hop_dong between '2020-01-01' and '2020-12-31' and hop_dong.id_nhan_vien = nhan_vien.id_nhan_vien);
+
+-- yêu cầu 17.	Cập nhật thông tin những khách hàng có TenLoaiKhachHang từ  Platinium lên Diamond, 
+-- chỉ cập nhật những khách hàng đã từng đặt phòng với tổng Tiền thanh toán trong năm 2019 là lớn hơn 10.000.000 VNĐ.
+
+update khach_hang, (
+select hop_dong.id_khach_hang as id,
+sum(hop_dong.tong_tien) as Tong_tien 
+from hop_dong
+where year(hop_dong.ngay_lam_hop_dong) = 2020
+group by hop_dong.id_khach_hang
+having Tong_tien > 5000000) as temp 
+set khach_hang.id_loai_khach = (
+select loai_khach.id_loai_khach
+from loai_khach
+where loai_khach.ten_loai_khach = 'Diamond')
+where khach_hang.id_loai_khach = (
+select loai_khach.id_loai_khach from loai_khach
+where loai_khach.ten_loai_khach = 'Platinium')
+and temp.id = khach_hang.id_khach_hang;
+
+-- yêu cầu 18.	Xóa những khách hàng có hợp đồng trước năm 2016 (chú ý ràngbuộc giữa các bảng).
+
+delete khach_hang, hop_dong, hop_dong_chi_tiet 
+from khach_hang 
+join hop_dong on khach_hang.id_khach_hang = hop_dong.id_khach_hang
+join hop_dong_chi_tiet on hop_dong.id_hop_dong = hop_dong_chi_tiet.id_hop_dong
+where not exists (
+select hop_dong.id_hop_dong 
+where year(hop_dong.ngay_lam_hop_dong) > '2020' and khach_hang .id_khach_hang= hop_dong.id_khach_hang);
+
+delete from khach_hang
+where khach_hang.id_khach_hang not in (
+select hop_dong.id_khach_hang
+from hop_dong
+where year(hop_dong.ngay_lam_hop_dong) < 2020
+);
+
+-- yêu cầu 19.	Cập nhật giá cho các Dịch vụ đi kèm được sử dụng trên 10 lần trong năm 2019 lên gấp đôi.
+update dich_vu_di_kem
+set dich_vu_di_kem.gia = dich_vu_di_kem.gia * 2
+where dich_vu_di_kem.id_dich_vu_di_kem in (
+	select hop_dong_chi_tiet.id_dich_vu_di_kem
+    from hop_dong_chi_tiet
+    inner join hop_dong on hop_dong_chi_tiet.id_hop_dong = hop_dong.id_hop_dong
+    where year(hop_dong.ngay_lam_hop_dong) = "2020"
+    group by hop_dong_chi_tiet.id_dich_vu_di_kem
+    having count(hop_dong_chi_tiet.id_dich_vu_di_kem) > 10
+    );
+
+
+-- yêu cầu 20.	Hiển thị thông tin của tất cả các Nhân viên và Khách hàng có trong hệ thống, thông tin hiển thị bao gồm 
+-- ID (IDNhanVien, IDKhachHang), HoTen, Email, SoDienThoai, NgaySinh, DiaChi.
+select 
+nhan_vien.id_nhan_vien as ID,
+nhan_vien.ho_ten,
+nhan_vien.email,
+nhan_vien.sdt,
+nhan_vien.ngay_sinh,
+nhan_vien.dia_chi,'nhan vien' as Bang
+from nhan_vien
+union all
+select
+khach_hang.id_khach_hang as ID,
+khach_hang.ho_ten,
+khach_hang.email,
+khach_hang.sdt,
+khach_hang.ngay_sinh,
+khach_hang.dia_chi, 'khach hang' as Bang
+from khach_hang;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
