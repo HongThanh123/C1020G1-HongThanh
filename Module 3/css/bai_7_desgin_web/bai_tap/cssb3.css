@@ -1,0 +1,15 @@
+body{
+    font-family: Arial;
+    font-size: 10px;
+}
+
+.head ul {
+    background-color: rgba(2, 4, 2, 0.81);
+    color: white;
+    list-style-type: none;
+    margin-left: 10px;
+    font-size: 30px;
+    float: top;
+    padding: 20px;
+    text-align: left;
+}
