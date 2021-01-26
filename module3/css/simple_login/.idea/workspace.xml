@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8c123796-f83f-4bf6-b616-d8aec229b37b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../web/src/bai1Servlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../web/web/bai1.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/bai_tap_2.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/bai_tap_2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/bai_tap_3.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/bai_tap_3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/cssb2.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/cssb2.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/cssb3.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Module 3/css/bai_7_desgin_web/bai_tap/cssb3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Module 3/css/bai_8_bootstrap/bai_tap/bai_tap_2.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Module 3/css/bai_8_bootstrap/bai_tap/bai_tap_2.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\C1020G1-HongThanh\module3\css\simple_login\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1nYp5m2tAHTPzMhOQe5ft2ItseM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Module 3/css/bai_9_web/thuc_hanh/simple_login" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Tomcat 9.0.21" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.21" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment>
+        <artifact name="simple_login:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="/simple_login_war_exploded" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings />
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="simple_login:war exploded" />
+        </option>
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8c123796-f83f-4bf6-b616-d8aec229b37b" name="Default Changelist" comment="" />
+      <created>1611576697363</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611576697363</updated>
+      <workItem from="1611576701257" duration="111000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1611576809357">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1611576809357" />
+  </component>
+</project>
