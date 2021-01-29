@@ -1,6 +1,7 @@
 package com.codegym.controller;
-import com.codegym.dao.IUserRespostory;
-import com.codegym.dao.UserRespostory;
+import com.codegym.dao.IUserRepository;
+import com.codegym.dao.UserRepository;
+import com.codegym.model.SortByName;
 import com.codegym.model.User;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "UserServlet", urlPatterns = {"","/users"})
 public class UserServlet extends HttpServlet {
-    private IUserRespostory userRespostory;
+    private IUserRepository UserRepository;
 
     public void init() {
-        userRespostory = new UserRespostory();
+        UserRepository = new UserRepository();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -63,8 +64,12 @@ public class UserServlet extends HttpServlet {
                 case "delete":
                     deleteUser(request, response);
                     break;
-                case "country":
+                case "search":
                     searchUser(request,response);
+                    break;
+                case "sortByName" +
+                        "":
+                    sortUser(request,response);
                     break;
                 default:
                     listUser(request, response);
@@ -75,9 +80,18 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    private void sortUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<User> userList = UserRepository.selectAllUsers();
+        SortByName sortByName = new SortByName();
+        userList.sort(sortByName);
+        request.setAttribute("listUser", userList);
+
+        request.getRequestDispatcher("user/list.jsp").forward(request,response);
+    }
+
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<User> listUser = userRespostory.selectAllUsers();
+        List<User> listUser = UserRepository.selectAllUsers();
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(request, response);
@@ -92,7 +106,7 @@ public class UserServlet extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        User existingUser = userRespostory.selectUser(id);
+        User existingUser = UserRepository.selectUser(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/edit.jsp");
         request.setAttribute("user", existingUser);
         dispatcher.forward(request, response);
@@ -105,7 +119,7 @@ public class UserServlet extends HttpServlet {
         String email = request.getParameter("email");
         String country = request.getParameter("country");
         User newUser = new User(name, email, country);
-        userRespostory.insertUser(newUser);
+        UserRepository.insertUser(newUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/create.jsp");
         dispatcher.forward(request, response);
     }
@@ -118,7 +132,7 @@ public class UserServlet extends HttpServlet {
         String country = request.getParameter("country");
 
         User book = new User(id, name, email, country);
-        userRespostory.updateUser(book);
+        UserRepository.updateUser(book);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/edit.jsp");
         dispatcher.forward(request, response);
     }
@@ -126,9 +140,9 @@ public class UserServlet extends HttpServlet {
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
-        userRespostory.deleteUser(id);
+        UserRepository.deleteUser(id);
 
-        List<User> listUser = userRespostory.selectAllUsers();
+        List<User> listUser = UserRepository.selectAllUsers();
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(request, response);
@@ -136,13 +150,12 @@ public class UserServlet extends HttpServlet {
 
     private void searchUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-       String country = request.getParameter("country");
-       userRespostory.searchUser(country);
+        String country = request.getParameter("country");
+        List<User> users = UserRepository.searchUser(country);
+        request.setAttribute("listUser", users);
 
-       List<User> listUser = userRespostory.selectAllUsers();
-        request.setAttribute("listUser", listUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("user/list.jsp").forward(request, response);
+
 
 
     }

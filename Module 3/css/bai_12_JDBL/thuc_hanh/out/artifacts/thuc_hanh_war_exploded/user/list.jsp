@@ -17,10 +17,10 @@
         <a href="/users?action=create">Add New User</a>
     </h2>
     <h3>Search</h3>
-    <form action = "/users?action=country">
+    <form action = "/users">
         <span>
-            <input type="text" name="name" country = "name">
-            <input type="hidden" name="action" value="country">
+            <input type="text" name="country" >
+            <input type="hidden" name="action" value="search">
             <input type="submit" value="Search">
         </span>
     </form>
@@ -28,6 +28,11 @@
 <div align ="center">
     <table border="1" cellpadding="5">
         <caption><h2>Leu Leu</h2></caption>
+        <tr>
+            <th colspan="5">
+                <a href="/users?action=sortByName">Sort By Name</a>
+            </th>
+        </tr>
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -44,7 +49,6 @@
                 <td>
                     <a href="/users?action=edit&id=${user.id}">Edit</a>
                     <a href="/users?action=delete&id=${user.id}">Delete</a>
-                    <a href="/users?action=delete&id=${user.country}">Search</a>
                 </td>
             </tr>
         </c:forEach>
