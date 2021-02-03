@@ -1,6 +1,27 @@
--- drop database case_study;
+drop database if exists case_study;
+
 create database case_study;
 use case_study;
+
+create table vai_tro (
+	id_vai_tro int primary key,
+    ten_vai_tro varchar(255)
+);
+
+create table su_dung (
+	ten_su_dung varchar(255) primary key,
+    mat_khau varchar(255)
+);
+
+create table role_user (
+id_vai_tro int,
+ten_su_dung varchar(255),
+primary key (id_vai_tro,ten_su_dung),
+
+foreign key (id_vai_tro) references vai_tro(id_vai_tro),
+foreign key (ten_su_dung) references su_dung(ten_su_dung)
+
+);
 create table loai_khach (
     id_loai_khach int primary key,
     ten_loai_khach varchar (45)
@@ -13,7 +34,7 @@ insert into loai_khach(id_loai_khach,ten_loai_khach) values
 (5,'Member');
 drop table if exists khach_hang;
 create table khach_hang (
-    id_khach_hang int primary key,
+    id_khach_hang int auto_increment primary key,
     id_loai_khach int,
     ho_ten varchar (45),
     ngay_sinh date,
@@ -23,6 +44,7 @@ create table khach_hang (
     dia_chi varchar (45),
     
     Foreign key (id_loai_khach) references loai_khach(id_loai_khach)
+    on delete cascade
 );
 insert into khach_hang(id_loai_khach,id_khach_hang,ho_ten,ngay_sinh,so_cmtnd,sdt,email,dia_chi) values
 (1,101,'Le Thanh Phong','1990-05-08','123456789','0935198920','thanhphongle@gmail.com','Quang Nam'),
@@ -108,11 +130,14 @@ create table nhan_vien (
     sdt varchar (45),
     email varchar (45),
     dia_chi varchar (45),
-    
+    ten_su_dung varchar(255),
     Foreign key (id_vi_tri) references vi_tri(id_vi_tri),
     Foreign key (id_trinh_do) references trinh_do(id_trinh_do),
-    Foreign key (id_bo_phan) references bo_phan(id_bo_phan)
+    Foreign key (id_bo_phan) references bo_phan(id_bo_phan),
+    foreign key (ten_su_dung) references su_dung(ten_su_dung)
+
 );
+
 insert into nhan_vien(id_nhan_vien,ho_ten,ngay_sinh,id_vi_tri,id_trinh_do,id_bo_phan,so_cmtnd,sdt,email,dia_chi,luong)values
 (201,'Ho Dung','1999-05-18',1,3,2,'178356276','0916273674','dung@gmail.com','Quang Binh',1000000),
 (202,'Nguyen Son','1989-07-09',1,5,4,'093627384','0937261536','son@gmail.com','Phu Yen',12000000),

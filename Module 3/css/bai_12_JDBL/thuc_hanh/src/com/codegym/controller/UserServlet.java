@@ -1,7 +1,6 @@
 package com.codegym.controller;
 import com.codegym.dao.IUserRepository;
 import com.codegym.dao.UserRepository;
-import com.codegym.model.SortByName;
 import com.codegym.model.User;
 
 import java.io.IOException;
@@ -14,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 @WebServlet(name = "UserServlet", urlPatterns = {"","/users"})
 public class UserServlet extends HttpServlet {
     private IUserRepository UserRepository;
@@ -23,7 +21,7 @@ public class UserServlet extends HttpServlet {
         UserRepository = new UserRepository();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest     request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) {
@@ -67,10 +65,6 @@ public class UserServlet extends HttpServlet {
                 case "search":
                     searchUser(request,response);
                     break;
-                case "sortByName" +
-                        "":
-                    sortUser(request,response);
-                    break;
                 default:
                     listUser(request, response);
                     break;
@@ -80,14 +74,6 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    private void sortUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<User> userList = UserRepository.selectAllUsers();
-        SortByName sortByName = new SortByName();
-        userList.sort(sortByName);
-        request.setAttribute("listUser", userList);
-
-        request.getRequestDispatcher("user/list.jsp").forward(request,response);
-    }
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {

@@ -1,3 +1,5 @@
+drop database if exists demo;
+
 CREATE DATABASE demo;
 USE demo;
 

@@ -11,13 +11,13 @@ public class UserRepository implements IUserRepository {
     private String jdbcUsername = "root";
     private String jdbcPassword = "0347237427";
 
-    private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, country) VALUES " +
+    private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (`name`, email, country) VALUES " +
             " (?, ?, ?);";
 
-    private static final String SELECT_USER_BY_ID = "select id,name,email,country from users where id =?";
-    private static final String SELECT_ALL_USERS = "select * from users";
+    private static final String SELECT_USER_BY_ID = "select id,`name`,email,country from users where id =?";
+    private static final String SELECT_ALL_USERS = "select * from users order by `name`";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
-    private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =? where id = ?;";
+    private static final String UPDATE_USERS_SQL = "update users set `name` = ?,email= ?, country =? where id = ?;";
     private static final String SEARCH_USERS_SQL = "select id,`name`, email, country " +
             "from users " + "where country = ?";
 
@@ -157,6 +157,7 @@ public class UserRepository implements IUserRepository {
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
+
                 e.printStackTrace(System.err);
                 System.err.println("SQLState: " + ((SQLException) e).getSQLState());
                 System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
