@@ -1,8 +1,9 @@
 package Controller;
 
-import Model.UserCustomer;
-import Repository.IUserRepositoryCustomer;
-import Repository.UserRepositoryCustomer;
+import Model.Bean.Customer;
+import Model.Repository.CustomerRepository;
+import Model.Service.IService;
+import Model.Service.impl.ServiceCustomer;
 
 
 import java.io.IOException;
@@ -19,11 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "CustomerServlet" , urlPatterns = "/userCustomers")
 public class CustomerServlet extends HttpServlet {
 
-    private IUserRepositoryCustomer UserRepositoryCustomer;
-
-    public void init() {
-        UserRepositoryCustomer = new UserRepositoryCustomer();
-    }
+    private IService serviceCustomer = new ServiceCustomer();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -70,7 +67,7 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void listCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<UserCustomer> listCustomer = UserRepositoryCustomer.selectAllUsers();
+        List<Customer> listCustomer = serviceCustomer.selectAllUsers();
         request.setAttribute("listCustomer", listCustomer);
         RequestDispatcher dispatcher = request.getRequestDispatcher("list.jsp");
         dispatcher.forward(request, response);
@@ -79,12 +76,12 @@ public class CustomerServlet extends HttpServlet {
     private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
-            UserRepositoryCustomer.deleteUser(id);
+            serviceCustomer.deleteUser(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        List<UserCustomer> listUser = UserRepositoryCustomer.selectAllUsers();
+        List<Customer> listUser = serviceCustomer.selectAllUsers();
         request.setAttribute("listCustomer", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("list.jsp");
         dispatcher.forward(request, response);
@@ -92,7 +89,7 @@ public class CustomerServlet extends HttpServlet {
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        UserCustomer editCustomer = UserRepositoryCustomer.selectUser(id);
+        Customer editCustomer = serviceCustomer.selectUser(id);
         request.setAttribute("userCustomer", editCustomer);
         RequestDispatcher dispatcher = request.getRequestDispatcher("edit.jsp");
         dispatcher.forward(request, response);
@@ -105,11 +102,7 @@ public class CustomerServlet extends HttpServlet {
 
 
     private void searchCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id_khach_hang");
-        List<UserCustomer> userCustomer = UserRepositoryCustomer.searchUser(id);
-        request.setAttribute("listCustomer", userCustomer);
 
-        request.getRequestDispatcher("list.jsp").forward(request, response);
     }
 
     private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -121,9 +114,9 @@ public class CustomerServlet extends HttpServlet {
         String email = request.getParameter("email");
         String dia_chi = request.getParameter("dia_chi");
 
-        UserCustomer userCustomer = new UserCustomer(id,name,ngay_sinh,cmnd,sdt,email,dia_chi);
+        Customer customer = new Customer(id,name,ngay_sinh,cmnd,sdt,email,dia_chi);
         try {
-            UserRepositoryCustomer.updateUser(userCustomer);
+            serviceCustomer.updateUser(customer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -133,16 +126,21 @@ public class CustomerServlet extends HttpServlet {
 
     private void insertCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
-
         String ngay_sinh = request.getParameter("ngay_sinh");
         String cmnd = request.getParameter("so_cmnd");
         String sdt = request.getParameter("sdt");
         String email = request.getParameter("email");
         String dia_chi = request.getParameter("dia_chi");
-        UserCustomer newUser = new UserCustomer(name,ngay_sinh,cmnd,sdt,email,dia_chi);
-        UserRepositoryCustomer.insertUser(newUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("create.jsp");
-        dispatcher.forward(request, response);
+        Customer newUser = new Customer(name,ngay_sinh,cmnd,sdt,email,dia_chi);
+
+        String message =  serviceCustomer.insertUser(newUser);
+
+        if(!message.equals("OK")){
+            request.setAttribute("message",message);
+            request.getRequestDispatcher("create.jsp").forward(request,response);
+        }else{
+            listCustomer(request,response);
+        }
     }
 
 

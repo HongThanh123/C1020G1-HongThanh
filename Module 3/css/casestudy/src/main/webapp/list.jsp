@@ -33,11 +33,9 @@
                             <a class="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item " style="margin-left: 50px">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Employee
-                            </a>
+                            <a class="nav-link active" aria-current="page" href="/userCustomers?action=">Employee</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item " style="margin-left: 50px">
                             <a class="nav-link active" aria-current="page" href="/userCustomers?action=">Customer</a>
                         </li>
                         <li class="nav-item" style="margin-left: 50px">
@@ -47,8 +45,12 @@
                             <a class="nav-link active" aria-current="page" href="#">Contract</a>
                         </li>
                     </ul>
-                    <form class="d-flex" style="margin-left: 450px">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex" style="margin-left: 450px" action="/userCustomers">
+                        <span>
+                            <input type="text" name="name" >
+                            <input type="hidden" name="action" value="search">
+                            <input type="submit" value="Search">
+                        </span>
                     </form>
                 </div>
             </div>

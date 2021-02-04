@@ -68,5 +68,10 @@
         </table>
     </form>
 </div>
+<div align="center">
+    <c:if test='${requestScope["message"] != null}'>
+        <span class="message text-danger">${requestScope["message"]}</span>
+    </c:if>
+</div>
 </body>
 </html>

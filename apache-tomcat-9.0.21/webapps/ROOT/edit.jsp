@@ -26,14 +26,14 @@
                     Edit User
                 </h2>
             </caption>
-            <c:if test="${requestScope.userCustomer != null}">
-                <input type="hidden" name="id" value="<c:out value='${requestScope.userCustomer.id}' />"/>
+            <c:if test="${requestScope.customer != null}">
+                <input type="hidden" name="id" value="<c:out value='${requestScope.customer.id}' />"/>
             </c:if>
             <tr>
                 <th>User Name:</th>
                 <td>
                     <input type="text" name="name" size="45"
-                           value="<c:out value='${requestScope.userCustomer.name}' />"
+                           value="<c:out value='${requestScope.customer.name}' />"
                     />
                 </td>
             </tr>
@@ -41,7 +41,7 @@
                 <th>Ngay Sinh:</th>
                 <td>
                         <input type="text" name="ngay_sinh" size="45"
-                           value="<c:out value='${requestScope.userCustomer.ngay_sinh}' />"
+                           value="<c:out value='${requestScope.customer.ngay_sinh}' />"
                     />
                 </td>
             </tr>
@@ -49,7 +49,7 @@
                 <th>CMND:</th>
                 <td>
                     <input type="text" name="so_cmtnd" size="45"
-                           value="<c:out value='${requestScope.userCustomer.cmnd}' />"
+                           value="<c:out value='${requestScope.customer.cmnd}' />"
                     />
                 </td>
             </tr>
@@ -57,7 +57,7 @@
                 <th>Số điện thoại:</th>
                 <td>
                     <input type="text" name="sdt" size="45"
-                           value="<c:out value='${requestScope.userCustomer.sdt}' />"
+                           value="<c:out value='${requestScope.customer.sdt}' />"
                     />
                 </td>
             </tr>
@@ -65,7 +65,7 @@
                 <th>Email:</th>
                 <td>
                     <input type="text" name="email" size="45"
-                           value="<c:out value='${requestScope.userCustomer.email}' />"
+                           value="<c:out value='${requestScope.customer.email}' />"
                     />
                 </td>
             </tr>
@@ -73,7 +73,7 @@
                 <th>Địa chỉ:</th>
                 <td>
                     <input type="text" name="dia_chi" size="15"
-                           value="<c:out value='${requestScope.userCustomer.dia_chi}' />"
+                           value="<c:out value='${requestScope.customer.dia_chi}' />"
                     />
                 </td>
             </tr>
